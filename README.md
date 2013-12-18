@@ -2,6 +2,8 @@
 
 Ruby lib for Dotide API
 
+[![Build Status](https://secure.travis-ci.org/dotide/dotide.rb.png?branch=master)](http://travis-ci.org/dotide/dotide.rb)
+
 ## Installation
 
 Add this line to your application's Gemfile:
