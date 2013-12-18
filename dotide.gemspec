@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Dotide::VERSION
   spec.authors       = ["Michael Ding"]
   spec.email         = ["yandy.ding@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{Simple wrapper for the Dotide API}
+  spec.summary       = "Ruby toolkit for working with the Dotide API"
+  spec.homepage      = "https://github.com/dotide/dotide.rb"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

@@ -1,6 +1,6 @@
 # Dotide
 
-TODO: Write a gem description
+Ruby lib for Dotide API
 
 ## Installation
 
