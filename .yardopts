@@ -1,0 +1,6 @@
+--no-private
+--title=""
+--markup=markdown
+--template-path=./yard
+--exclude lib/dotide/arguments.rb
+--exclude lib/dotide/response
