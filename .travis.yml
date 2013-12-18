@@ -1,0 +1,16 @@
+bundler_args: --without development
+language: ruby
+rvm:
+  - jruby-19mode
+  - rbx-19mode
+  - 1.8.7
+  - 1.9.2
+  - 1.9.3
+  - 2.0.0
+matrix:
+  allow_failures:
+    - rvm: rbx-19mode
+env:
+  - TEST_DOTIDE_LOGIN="dotide_api" TEST_DOTIDE_PASSWORD="MYSOCRATESNOTE" TEST_DOTIDE_TOKEN="6a21f190e3422bf89afa8b360d923b0c30e8fbfa"
+before_script:
+  - chmod 600 spec/fixtures/.netrc
