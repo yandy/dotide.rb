@@ -3,14 +3,14 @@ module Dotide
   # Configuration options for {Client}, defaulting to values
   # in {Default}
   module Configurable
-    # @!attribute [w] api_endpoint
+    # @!attribute api_endpoint
     #   @return [String] Base URL for API requests. default: https://api.dotide.com/
     # @!attribute auto_paginate
     #   @return [Boolean] Auto fetch next page of results until rate limit reached
     # @!attribute connection_options
     #   @see https://github.com/lostisland/faraday
     #   @return [Hash] Configure connection options for Faraday
-    # @!attribute [w] login
+    # @!attribute login
     #   @return [String] Dotide username or email for Basic Authentication
     # @!attribute middleware
     #   @see https://github.com/lostisland/faraday
@@ -28,13 +28,13 @@ module Dotide
     #   @return [String] URI for proxy server
     # @!attribute user_agent
     #   @return [String] Configure User-Agent header for requests.
-    # @!attribute [w] web_endpoint
+    # @!attribute web_endpoint
     #   @return [String] Base URL for web URLs. default: https://dotide.com/
 
-    attr_accessor :auto_paginate, :connection_options,
-                  :middleware, :netrc, :netrc_file,
+    attr_accessor :auto_paginate, :connection_options, :auth_token,
+                  :middleware, :netrc, :netrc_file, :login,
                   :per_page, :proxy, :user_agent, :default_media_type
-    attr_writer :password, :web_endpoint, :api_endpoint, :login
+    attr_writer :password, :web_endpoint, :api_endpoint
 
     class << self
 
@@ -47,6 +47,7 @@ module Dotide
           :connection_options,
           :default_media_type,
           :login,
+          :auth_token,
           :middleware,
           :netrc,
           :netrc_file,
@@ -79,15 +80,9 @@ module Dotide
 
     # Base URL for generated web URLs
     #
-    # @return [String] Default: https://github.com/
+    # @return [String] Default: https://dotide.com/
     def web_endpoint
       File.join(@web_endpoint, "")
-    end
-
-    def login
-      @login ||= begin
-        user.login if token_authenticated?
-      end
     end
 
     def netrc?

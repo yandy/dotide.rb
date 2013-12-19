@@ -63,7 +63,7 @@ module Dotide
         ENV['DOTIDE_DEFAULT_MEDIA_TYPE'] || MEDIA_TYPE
       end
 
-      # Default GitHub username for Basic Auth from ENV
+      # Default Dotide username for Basic Auth from ENV
       # @return [String]
       def login
         ENV['DOTIDE_LOGIN']
@@ -76,10 +76,16 @@ module Dotide
         MIDDLEWARE
       end
 
-      # Default GitHub password for Basic Auth from ENV
+      # Default Dotide password for Basic Auth from ENV
       # @return [String]
       def password
         ENV['DOTIDE_PASSWORD']
+      end
+
+      # Default Dotide auth_token for Token Auth from ENV
+      # @return [String]
+      def auth_token
+        ENV['DOTIDE_AUTH_TOKEN']
       end
 
       # Default pagination page size from ENV

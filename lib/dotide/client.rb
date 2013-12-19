@@ -1,6 +1,7 @@
 require 'sawyer'
 require 'dotide/arguments'
 require 'dotide/configurable'
+require 'dotide/authentication'
 
 module Dotide
 
@@ -10,6 +11,7 @@ module Dotide
   class Client
 
     include Dotide::Configurable
+    include Dotide::Authentication
 
     # Header keys that can be passed in options hash to {#get},{#head}
     CONVENIENCE_HEADERS = Set.new [:accept, :content_type]
