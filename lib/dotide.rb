@@ -1,6 +1,9 @@
 require 'dotide/client'
+require 'dotide/default'
 
+# Ruby toolkit for the GitHub API
 module Dotide
+
   class << self
     include Dotide::Configurable
 
@@ -23,6 +26,7 @@ module Dotide
       return super unless client.respond_to?(method_name)
       client.send(method_name, *args, &block)
     end
+
   end
 end
 
