@@ -41,7 +41,7 @@ module Dotide
     #
     # @return [String]
     def documentation_url
-      data[:documentation_url] if data
+      data[:documentation_url] if data && data.is_a?(Hash)
     end
 
     # Array of validation errors
@@ -100,6 +100,7 @@ module Dotide
       return nil if @response.nil?
 
       message =  "#{@response[:method].to_s.upcase} "
+      message << @response[:url].to_s + ": "
       message << "#{@response[:status]} - "
       message << "#{response_message}" unless response_message.nil?
       message << "#{response_error}" unless response_error.nil?
