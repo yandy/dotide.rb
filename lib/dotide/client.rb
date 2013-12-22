@@ -112,16 +112,18 @@ module Dotide
     # @return [Sawyer::Resource]
     def paginate(url, options = {})
       opts = parse_query_and_convenience_headers(options.dup)
+      opts[:query][:page] = 1
       if @auto_paginate || @per_page
         opts[:query][:per_page] ||= @per_page || (@auto_paginate ? 100 : nil)
       end
 
-      data = request(:get, url, opts)
+      data = request(:get, url, opts.dup)
 
       if @auto_paginate && data.is_a?(Array)
-        while @last_response.rels[:next]
-          @last_response = @last_response.rels[:next].get
-          data.concat(@last_response.data) if @last_response.data.is_a?(Array)
+        while @last_response.data.length == opts[:query][:per_page]
+          opts[:query][:page] += 1
+          d = request(:get, url, opts.dup)
+          data.concat(d) if d.is_a?(Array)
         end
 
       end
@@ -179,7 +181,7 @@ module Dotide
     def boolean_from_response(method, path, options = {})
       request(method, path, options)
       @last_response.status == 204
-    rescue Octokit::NotFound
+    rescue Dotide::NotFound
       false
     end
 

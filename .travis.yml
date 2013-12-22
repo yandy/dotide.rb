@@ -11,6 +11,6 @@ matrix:
   allow_failures:
     - rvm: rbx-19mode
 env:
-  - TEST_DOTIDE_LOGIN="dotide_api" TEST_DOTIDE_PASSWORD="MYSOCRATESNOTE" TEST_DOTIDE_AUTH_TOKEN="6a21f190e3422bf89afa8b360d923b0c30e8fbfa"
+  - TEST_DOTIDE_LOGIN="test" TEST_DOTIDE_PASSWORD="useintest" TEST_DOTIDE_AUTH_TOKEN="8881da61149b75a0b7b4f2eb53ce4d9d"
 before_script:
   - chmod 600 spec/fixtures/.netrc

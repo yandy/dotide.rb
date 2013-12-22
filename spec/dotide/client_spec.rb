@@ -205,7 +205,7 @@ describe Dotide::Client do
       Dotide.auth_token = test_dotide_auth_token
       VCR.use_cassette 'root' do
         root = Dotide.client.root
-        expect(root.href).to eq "http://api.dotide.com/v1"
+        expect(root.version).to eq "1"
       end
     end
   end
@@ -332,10 +332,11 @@ describe Dotide::Client do
     end
 
     it "fetches all the pages" do
-      Dotide.client.paginate('/v1/keys')
-      assert_requested :get, dotide_url("/v1/keys?per_page=3")
-      (2..7).each do |i|
-        assert_requested :get, dotide_url("/v1/keys?per_page=3&page=#{i}")
+      Dotide.client.paginate('/v1/products/52b6c56960eba2226e000001/devices/1/datastreams/x/datapoints')
+      (1..3).each do |i|
+        request = stub_get('/v1/products/52b6c56960eba2226e000001/devices/1/datastreams/x/datapoints').
+          with(:query => {:per_page => 3, :page => i})
+        assert_requested request
       end
     end
   end
