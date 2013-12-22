@@ -2,7 +2,7 @@
 
 Ruby lib for Dotide API
 
-[![Build Status](https://secure.travis-ci.org/dotide/dotide.rb.png?branch=master)](http://travis-ci.org/dotide/dotide.rb)
+[![Build Status](https://travis-ci.org/dotide/dotide.rb.png?branch=master)](https://travis-ci.org/dotide/dotide.rb)
 
 ## Installation
 
