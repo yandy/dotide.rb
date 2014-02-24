@@ -11,6 +11,6 @@ matrix:
   allow_failures:
     - rvm: rbx-19mode
 env:
-  - TEST_DOTIDE_LOGIN="test" TEST_DOTIDE_PASSWORD="useintest" TEST_DOTIDE_AUTH_TOKEN="8881da61149b75a0b7b4f2eb53ce4d9d"
+  - TEST_DOTIDE_CLIENT_ID="e71475ae1f196651f50b" TEST_DOTIDE_CLIENT_SECRET="0be8f51f88a037114bba6c91b805fabc874fde22" TEST_DOTIDE_ACCESS_TOKEN="28b0f51814c8a441460ea97efcd7d44ab0548d5b6b9403f4db9eb4b820844205"
 before_script:
   - chmod 600 spec/fixtures/.netrc

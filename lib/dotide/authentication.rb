@@ -4,12 +4,12 @@ module Dotide
   module Authentication
 
     # Indicates if the client was supplied  Basic Auth
-    # username and password
+    # username and client_secret
     #
     # @see http://developer.dotide.com/cn/api/base/auth.html
     # @return [Boolean]
     def basic_authenticated?
-      !!(@login && @password)
+      !!(@client_id && @client_secret)
     end
 
     # Indicates if the client was supplied an OAuth
@@ -18,11 +18,11 @@ module Dotide
     # @see http://developer.dotide.com/cn/api/base/auth.html
     # @return [Boolean]
     def token_authenticated?
-      !!(@login && @auth_token)
+      !!@access_token
     end
 
     # Indicates if the client was supplied an OAuth
-    # access token or Basic Auth username and password
+    # access token or Basic Auth username and client_secret
     #
     # @see http://developer.dotide.com/cn/api/base/auth.html
     # @return [Boolean]
@@ -43,8 +43,8 @@ module Dotide
         # creds will be nil if there is no netrc for this end point
         warn "Error loading credentials from netrc file for #{api_endpoint}"
       else
-        self.login = creds.shift
-        self.password = creds.shift
+        self.client_id = creds.shift
+        self.client_secret = creds.shift
       end
     rescue LoadError
       warn "Please install netrc gem for .netrc support"

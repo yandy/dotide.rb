@@ -17,7 +17,7 @@ module Dotide
     MEDIA_TYPE   = "application/json"
 
     # Default WEB endpoint
-    WEB_ENDPOINT = "https://dotide.com".freeze
+    WEB_ENDPOINT = "http://dotide.com".freeze
 
     # Default Faraday middleware stack
     MIDDLEWARE = Faraday::Builder.new do |builder|
@@ -40,12 +40,6 @@ module Dotide
         ENV['DOTIDE_API_ENDPOINT'] || API_ENDPOINT
       end
 
-      # Default pagination preference from ENV
-      # @return [String]
-      def auto_paginate
-        ENV['DOTIDE_AUTO_PAGINATE']
-      end
-
       # Default options for Faraday::Connection
       # @return [Hash]
       def connection_options
@@ -63,10 +57,10 @@ module Dotide
         ENV['DOTIDE_DEFAULT_MEDIA_TYPE'] || MEDIA_TYPE
       end
 
-      # Default Dotide username for Basic Auth from ENV
+      # Default Dotide client_id for Basic Auth from ENV
       # @return [String]
-      def login
-        ENV['DOTIDE_LOGIN']
+      def client_id
+        ENV['DOTIDE_CLIENT_ID']
       end
 
       # Default middleware stack for Faraday::Connection
@@ -76,24 +70,16 @@ module Dotide
         MIDDLEWARE
       end
 
-      # Default Dotide password for Basic Auth from ENV
+      # Default Dotide client_secret for Basic Auth from ENV
       # @return [String]
-      def password
-        ENV['DOTIDE_PASSWORD']
+      def client_secret
+        ENV['DOTIDE_CLIENT_SECRET']
       end
 
       # Default Dotide auth_token for Token Auth from ENV
       # @return [String]
-      def auth_token
-        ENV['DOTIDE_AUTH_TOKEN']
-      end
-
-      # Default pagination page size from ENV
-      # @return [Fixnum] Page size
-      def per_page
-        page_size = ENV['DOTIDE_PER_PAGE']
-
-        page_size.to_i if page_size
+      def access_token
+        ENV['DOTIDE_ACCESS_TOKEN']
       end
 
       # Default proxy server URI for Faraday connection from ENV

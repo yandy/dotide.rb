@@ -5,10 +5,10 @@ require 'dotide/authentication'
 
 module Dotide
 
-  # Client for the Dotide API
+  # Connection for the Dotide API
   #
   # @see http://developer.dotide.com
-  class Client
+  class Connection
 
     include Dotide::Configurable
     include Dotide::Authentication
@@ -33,17 +33,17 @@ module Dotide
       opts.hash == options.hash
     end
 
-    # Text representation of the client, masking tokens and passwords
+    # Text representation of the client, masking tokens and client_secrets
     #
     # @return [String]
     def inspect
       inspected = super
 
-      # mask password
-      inspected = inspected.gsub! @password, "*******" if @password
+      # mask client_secret
+      inspected = inspected.gsub! @client_secret, "*******" if @client_secret
       # Only show last 4 of token, secret
-      if @auth_token
-        inspected = inspected.gsub! @auth_token, "#{'*'*36}#{@auth_token[36..-1]}"
+      if @access_token
+        inspected = inspected.gsub! @access_token, "#{'*'*36}#{@access_token[36..-1]}"
       end
 
       inspected
@@ -103,34 +103,6 @@ module Dotide
       request :head, url, parse_query_and_convenience_headers(options)
     end
 
-    # Make one or more HTTP GET requests, optionally fetching
-    # the next page of results from URL in Link response header based
-    # on value in {#auto_paginate}.
-    #
-    # @param url [String] The path, relative to {#api_endpoint}
-    # @param options [Hash] Query and header params for request
-    # @return [Sawyer::Resource]
-    def paginate(url, options = {})
-      opts = parse_query_and_convenience_headers(options.dup)
-      opts[:query][:page] = 1
-      if @auto_paginate || @per_page
-        opts[:query][:per_page] ||= @per_page || (@auto_paginate ? 100 : nil)
-      end
-
-      data = request(:get, url, opts.dup)
-
-      if @auto_paginate && data.is_a?(Array)
-        while @last_response.data.length == opts[:query][:per_page]
-          opts[:query][:page] += 1
-          d = request(:get, url, opts.dup)
-          data.concat(d) if d.is_a?(Array)
-        end
-
-      end
-
-      data
-    end
-
     # Hypermedia agent for the GitHub API
     #
     # @return [Sawyer::Agent]
@@ -139,9 +111,9 @@ module Dotide
         http.headers[:accept] = default_media_type
         http.headers[:user_agent] = user_agent
         if basic_authenticated?
-          http.basic_auth(@login, @password)
+          http.basic_auth(@client_id, @client_secret)
         elsif token_authenticated?
-          http.authorization 'token', "#{@login}:#{@auth_token}"
+          http.authorization 'Bearer', @access_token
         end
       end
     end
@@ -150,7 +122,7 @@ module Dotide
     #
     # @return [Sawyer::Resource]
     def root
-      get "/v1"
+      get "/"
     end
 
     # Response for last HTTP request
@@ -171,7 +143,7 @@ module Dotide
         end
       end
 
-      @last_response = response = agent.call(method, URI.encode(path.to_s), data, options)
+      @last_response = response = agent.call(method, URI.encode("/v1#{path.to_s}"), data, options)
       response.data
     end
 

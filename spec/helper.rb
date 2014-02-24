@@ -21,14 +21,14 @@ end
 require 'vcr'
 VCR.configure do |c|
   c.configure_rspec_metadata!
-  c.filter_sensitive_data("<DOTIDE_LOGIN>") do
-      ENV['TEST_DOTIDE_LOGIN']
+  c.filter_sensitive_data("<DOTIDE_CLIENT_ID>") do
+    test_dotide_client_id
   end
-  c.filter_sensitive_data("<DOTIDE_PASSWORD>") do
-      ENV['TEST_DOTIDE_PASSWORD']
+  c.filter_sensitive_data("<DOTIDE_CLIENT_SECRET>") do
+    test_dotide_client_secret
   end
-  c.filter_sensitive_data("<<DOTIDE_AUTH_TOKEN>>") do
-      ENV['TEST_DOTIDE_AUTH_TOKEN']
+  c.filter_sensitive_data("<DOTIDE_ACCESS_TOKEN>") do
+    test_dotide_access_token
   end
   c.default_cassette_options = {
     :serialize_with             => :json,
@@ -41,16 +41,16 @@ VCR.configure do |c|
   c.hook_into :webmock
 end
 
-def test_dotide_login
-  ENV.fetch 'TEST_DOTIDE_LOGIN'
+def test_dotide_client_id
+  ENV.fetch 'TEST_DOTIDE_CLIENT_ID', 'x' * 20
 end
 
-def test_dotide_password
-  ENV.fetch 'TEST_DOTIDE_PASSWORD'
+def test_dotide_client_secret
+  ENV.fetch 'TEST_DOTIDE_CLIENT_SECRET', 'x' * 40
 end
 
-def test_dotide_auth_token
-  ENV.fetch 'TEST_DOTIDE_AUTH_TOKEN'
+def test_dotide_access_token
+  ENV.fetch 'TEST_DOTIDE_ACCESS_TOKEN', 'x' * 40
 end
 
 def stub_delete(path)
@@ -95,28 +95,24 @@ def json_response(file)
 end
 
 def dotide_url(path)
-  "http://api.dotide.com#{path}"
+  "http://api.dotide.com/v1#{path}"
 end
 
 def basic_dotide_url(path, options = {})
-  login = options.fetch(:login, test_dotide_login)
-  password = options.fetch(:password, test_dotide_password)
+  client_id = options.fetch(:client_id, test_dotide_client_id)
+  client_secret = options.fetch(:client_secret, test_dotide_client_secret)
 
-  "http://#{login}:#{password}@api.dotide.com#{path}"
+  "http://#{client_id}:#{client_secret}@api.dotide.com/v1#{path}"
 end
 
-def basic_auth_client(login = test_dotide_login, password = test_dotide_password)
-  client = Dotide.client
-  client.login = test_dotide_login
-  client.password = test_dotide_password
+def basic_auth_connection(client_id = test_dotide_client_id, client_secret = test_dotide_client_secret)
+  connection = Dotide.connection
+  connection.client_id = test_dotide_client_id
+  connection.client_secret = test_dotide_client_secret
 
-  client
+  connection
 end
 
-def token_auth_client(login = test_dotide_login, auth_token = test_dotide_auth_token )
-  client = Dotide.client
-  client.login = login
-  client.auth_token = auth_token
-
-  client
+def oauth_connection
+  Dotide::Connection.new(access_token: test_dotide_access_token)
 end

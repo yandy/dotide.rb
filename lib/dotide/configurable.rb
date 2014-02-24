@@ -5,13 +5,13 @@ module Dotide
   module Configurable
     # @!attribute api_endpoint
     #   @return [String] Base URL for API requests. default: https://api.dotide.com/
-    # @!attribute auto_paginate
-    #   @return [Boolean] Auto fetch next page of results until rate limit reached
     # @!attribute connection_options
     #   @see https://github.com/lostisland/faraday
     #   @return [Hash] Configure connection options for Faraday
-    # @!attribute login
-    #   @return [String] Dotide username or email for Basic Authentication
+    # @!attribute client_id
+    #   @return [String] Dotide client id of a database
+    # @!attribute access_token
+    #   @return [String] OAuth2 access token for authentication
     # @!attribute middleware
     #   @see https://github.com/lostisland/faraday
     #   @return [Faraday::Builder] Configure middleware for Faraday
@@ -19,10 +19,8 @@ module Dotide
     #   @return [Boolean] Instruct Dotide to get credentials from .netrc file
     # @!attribute netrc_file
     #   @return [String] Path to .netrc file. default: ~/.netrc
-    # @!attribute [w] password
-    #   @return [String] Dotide password for Basic Authentication
-    # @!attribute per_page
-    #   @return [String] Configure page size for paginated results. API default: 30
+    # @!attribute [w] client_secret
+    #   @return [String] Dotide client_secret of a database
     # @!attribute proxy
     #   @see https://github.com/lostisland/faraday
     #   @return [String] URI for proxy server
@@ -31,10 +29,10 @@ module Dotide
     # @!attribute web_endpoint
     #   @return [String] Base URL for web URLs. default: https://dotide.com/
 
-    attr_accessor :auto_paginate, :connection_options, :auth_token,
-                  :middleware, :netrc, :netrc_file, :login,
-                  :per_page, :proxy, :user_agent, :default_media_type
-    attr_writer :password, :web_endpoint, :api_endpoint
+    attr_accessor :connection_options, :access_token,
+                  :middleware, :netrc, :netrc_file, :client_id,
+                  :proxy, :user_agent, :default_media_type
+    attr_writer :client_secret, :web_endpoint, :api_endpoint
 
     class << self
 
@@ -43,16 +41,14 @@ module Dotide
       def keys
         @keys ||= [
           :api_endpoint,
-          :auto_paginate,
           :connection_options,
           :default_media_type,
-          :login,
-          :auth_token,
+          :client_id,
+          :access_token,
           :middleware,
           :netrc,
           :netrc_file,
-          :per_page,
-          :password,
+          :client_secret,
           :proxy,
           :user_agent,
           :web_endpoint
