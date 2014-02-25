@@ -71,27 +71,6 @@ describe Dotide::Connection do
         inspected = connection.inspect
         expect(inspected).to_not match test_dotide_access_token
       end
-
-      describe "with .netrc" do
-        it "can read .netrc files" do
-          Dotide.reset!
-          connection = Dotide::Connection.new \
-            :netrc => true,
-            :netrc_file => File.join(fixture_path, '.netrc')
-          expect(connection.client_id).to eq test_dotide_client_id
-          expect(connection.instance_variable_get(:"@client_secret")).to eq test_dotide_client_secret
-        end
-
-        it "can read non-standard API endpoint creds from .netrc" do
-          Dotide.reset!
-          connection = Dotide::Connection.new \
-            :netrc => true,
-            :netrc_file => File.join(fixture_path, '.netrc'),
-            :api_endpoint => 'http://api.dotide.dev'
-          expect(connection.client_id).to eq test_dotide_client_id
-          expect(connection.instance_variable_get(:"@client_secret")).to eq test_dotide_client_secret
-        end
-      end
     end
   end
 
@@ -164,9 +143,6 @@ describe Dotide::Connection do
           config.client_id = test_dotide_client_id
           config.client_secret = test_dotide_client_secret
         end
-
-        puts 'Client ID'
-        puts Dotide.connection.client_id
 
         VCR.turned_off do
           root_request = stub_request(:get, "http://#{test_dotide_client_id}:#{test_dotide_client_secret}@api.dotide.com/v1/")

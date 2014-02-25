@@ -53,6 +53,10 @@ def test_dotide_access_token
   ENV.fetch 'TEST_DOTIDE_ACCESS_TOKEN', 'x' * 40
 end
 
+def test_dotide_database
+  ENV.fetch 'TEST_DOTIDE_DATABASE', 'dotide-test'
+end
+
 def stub_delete(path)
   stub_request(:delete, dotide_url(path))
 end

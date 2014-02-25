@@ -82,6 +82,12 @@ module Dotide
         ENV['DOTIDE_ACCESS_TOKEN']
       end
 
+      # Default Dotide database from ENV
+      # @return [String]
+      def database
+        ENV['DOTIDE_DATABASE']
+      end
+
       # Default proxy server URI for Faraday connection from ENV
       # @return [String]
       def proxy
@@ -98,18 +104,6 @@ module Dotide
       # @return [String]
       def web_endpoint
         ENV['DOTIDE_WEB_ENDPOINT'] || WEB_ENDPOINT
-      end
-
-      # Default behavior for reading .netrc file
-      # @return [Boolean]
-      def netrc
-        ENV['DOTIDE_NETRC'] || false
-      end
-
-      # Default path for .netrc file
-      # @return [String]
-      def netrc_file
-        ENV['DOTIDE_NETRC_FILE'] || File.join(ENV['HOME'].to_s, '.netrc')
       end
 
     end

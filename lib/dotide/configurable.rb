@@ -10,15 +10,13 @@ module Dotide
     #   @return [Hash] Configure connection options for Faraday
     # @!attribute client_id
     #   @return [String] Dotide client id of a database
+    # @!attribute database
+    #   @return [String] Database's name
     # @!attribute access_token
     #   @return [String] OAuth2 access token for authentication
     # @!attribute middleware
     #   @see https://github.com/lostisland/faraday
     #   @return [Faraday::Builder] Configure middleware for Faraday
-    # @!attribute netrc
-    #   @return [Boolean] Instruct Dotide to get credentials from .netrc file
-    # @!attribute netrc_file
-    #   @return [String] Path to .netrc file. default: ~/.netrc
     # @!attribute [w] client_secret
     #   @return [String] Dotide client_secret of a database
     # @!attribute proxy
@@ -29,9 +27,9 @@ module Dotide
     # @!attribute web_endpoint
     #   @return [String] Base URL for web URLs. default: https://dotide.com/
 
-    attr_accessor :connection_options, :access_token,
-                  :middleware, :netrc, :netrc_file, :client_id,
-                  :proxy, :user_agent, :default_media_type
+    attr_accessor :connection_options, :access_token, :database,
+                  :middleware, :client_id, :user_agent,
+                  :proxy, :default_media_type
     attr_writer :client_secret, :web_endpoint, :api_endpoint
 
     class << self
@@ -45,9 +43,8 @@ module Dotide
           :default_media_type,
           :client_id,
           :access_token,
+          :database,
           :middleware,
-          :netrc,
-          :netrc_file,
           :client_secret,
           :proxy,
           :user_agent,
@@ -70,6 +67,8 @@ module Dotide
     end
     alias setup reset!
 
+    alias_method :use, :'database='
+
     def api_endpoint
       File.join(@api_endpoint, "")
     end
@@ -79,10 +78,6 @@ module Dotide
     # @return [String] Default: https://dotide.com/
     def web_endpoint
       File.join(@web_endpoint, "")
-    end
-
-    def netrc?
-      !!@netrc
     end
 
     private

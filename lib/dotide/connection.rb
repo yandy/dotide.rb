@@ -21,8 +21,6 @@ module Dotide
       Dotide::Configurable.keys.each do |key|
         instance_variable_set(:"@#{key}", options[key] || Dotide.instance_variable_get(:"@#{key}"))
       end
-
-      login_from_netrc unless user_authenticated?
     end
 
     # Compares client options to a Hash of requested options
@@ -143,7 +141,7 @@ module Dotide
         end
       end
 
-      @last_response = response = agent.call(method, URI.encode("/v1#{path.to_s}"), data, options)
+      @last_response = response = agent.call(method, URI.encode("/v1/#{database}#{path.to_s}"), data, options)
       response.data
     end
 
