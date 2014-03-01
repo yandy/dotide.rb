@@ -1,0 +1,36 @@
+[
+    {
+        "access_token": "9404fde90f5534164c4da5fd2551807c63352b48dbcb9cfde4f7cfb63da417df",
+        "scopes": [
+            {
+                "permissions": [
+                    "read",
+                    "write",
+                    "delete"
+                ],
+                "global": true,
+                "ids": [],
+                "tags": []
+            }
+        ],
+        "created_at": "2014-02-20T00:14:17.650+08:00",
+        "updated_at": "2014-02-25T15:38:57.120+08:00"
+    },
+    {
+        "access_token": "947ceda1acb5d7ed02afcfaa5dc59e7971cbde9edb276779f55c3731e3860363",
+        "scopes": [
+            {
+                "permissions": [
+                    "write"
+                ],
+                "global": false,
+                "ids": [
+                    "loc-1234556"
+                ],
+                "tags": []
+            }
+        ],
+        "created_at": "2014-02-21T15:39:03.896+08:00",
+        "updated_at": "2014-02-21T15:39:03.896+08:00"
+    }
+]

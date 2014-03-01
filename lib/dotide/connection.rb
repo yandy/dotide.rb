@@ -3,6 +3,7 @@ require 'dotide/arguments'
 require 'dotide/configurable'
 require 'dotide/authentication'
 require 'dotide/data'
+require 'dotide/authorization'
 
 module Dotide
 
@@ -14,6 +15,7 @@ module Dotide
     include Dotide::Configurable
     include Dotide::Authentication
     include Dotide::Data
+    include Dotide::Authorization
 
     # Header keys that can be passed in options hash to {#get},{#head}
     CONVENIENCE_HEADERS = Set.new [:accept, :content_type]
