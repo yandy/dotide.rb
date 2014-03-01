@@ -28,7 +28,7 @@ module Dotide
         @conn = conn
         @url_root = url_root
         if resource.is_a? Sawyer::Resource
-          @attrs = resource.attrs
+          @attrs = hashie(resource)
           @_persist = true
         elsif resource.is_a? Hash
           @attrs = resource
@@ -60,6 +60,18 @@ module Dotide
 
       def persist?
         !!@_persist
+      end
+
+      def hashie(res)
+        data = {}
+        res.attrs.each do |k, v|
+          if v.is_a? Sawyer::Resource
+            data[k] = hashie(v)
+          else
+            data[k] = v
+          end
+        end
+        return data
       end
 
     end

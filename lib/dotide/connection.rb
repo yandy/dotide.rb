@@ -2,10 +2,7 @@ require 'sawyer'
 require 'dotide/arguments'
 require 'dotide/configurable'
 require 'dotide/authentication'
-require 'dotide/collection'
 require 'dotide/data'
-require 'dotide/models/datapoint'
-require 'dotide/models/datastream'
 
 module Dotide
 

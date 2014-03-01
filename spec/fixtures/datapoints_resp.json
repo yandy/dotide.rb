@@ -1,0 +1,31 @@
+{
+  "id": "51e51544fa36a48592000074",
+  "datapoints": [
+    {
+      "t": "2014-01-03T00:00:01Z",
+      "v": 10
+    },
+    {
+      "t": "2014-01-03T00:30:20Z",
+      "v": 20
+    }
+  ],
+  "options": {
+    "start": "2014-01-03T00:00:00Z",
+    "end": "2014-01-03T01:00:00Z",
+    "tz": "UTC",
+    "order": "asc",
+    "limit": 100,
+    "skip": 0,
+    "interval": 60,
+    "function": "avg",
+    "summary": true
+  },
+  "summary": {
+    "count": 2,
+    "max": 20,
+    "min": 10,
+    "sum": 30,
+    "avg": 15
+  }
+}

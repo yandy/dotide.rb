@@ -33,7 +33,7 @@ module Dotide
       end
 
       def datapoints
-        @_datapoints ||= Dotide::Collection.new(conn, Dotide::Models::Datapoint, "#{url}/datapoints")
+        @_datapoints ||= Dotide::Collections::Datapoints.new(conn, id)
       end
 
     end
