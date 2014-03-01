@@ -20,7 +20,7 @@ describe "Manipulate" do
                 :authorization => "Bearer #{test_dotide_access_token}"
                 }).
           to_return(json_response('datastreams.json'))
-      ds = @datastreams.find(tags: 'a,b,c')
+      ds = @datastreams.find(tags: ['a', 'b', 'c'])
       expect(ds).to be_kind_of Array
       expect(ds.length).to eq 16
       expect(ds.first).to be_kind_of Dotide::Models::Datastream

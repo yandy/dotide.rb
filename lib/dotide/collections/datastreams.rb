@@ -11,7 +11,16 @@ module Dotide
         @url = '/datastreams'
       end
 
-      def find(q={})
+      def find(query = {})
+        q = query.dup
+        if q.key? :tags
+          tags = q.delete :tags
+          q[:tags] = tags.join(',')
+        end
+        if q.key? :ids
+          ids = q.delete :ids
+          q[:ids] = ids.join(',')
+        end
         conn.get(url, q).map do |m|
           model.new(conn, m, url)
         end
