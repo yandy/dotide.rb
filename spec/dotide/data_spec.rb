@@ -52,9 +52,18 @@ describe "Manipulate" do
 
     it "build a datastream model" do
       body = {id: 'loc-123456'}
+      post_request = stub_post("/#{test_dotide_database}/datastreams").
+          with(:headers => {:authorization => "Bearer #{test_dotide_access_token}"},
+               :content_type => 'application/json',
+               :body => body.to_json
+               ).
+          to_return(json_response('datastream.json'))
       ds = @datastreams.build(body)
       expect(ds).to be_kind_of Dotide::Models::Datastream
       expect(ds.persist?).to be_false
+      ds.save
+      expect(ds.persist?).to be_true
+      assert_requested post_request
     end
 
     it "delete a datastream from collection", :vcr do
@@ -121,6 +130,24 @@ describe "Manipulate" do
       dp = @datastream.datapoints.create(t: '2014-01-03T00:00:01Z', v: 10)
       expect(dp.t).to be_kind_of String
       expect(dp.v).to be_kind_of Integer
+      assert_requested post_request
+    end
+
+    it "build a datapoint", :vcr do
+      post_request = stub_post("/#{test_dotide_database}/datastreams/loc-123456/datapoints").
+          with(headers: {authorization: "Bearer #{test_dotide_access_token}"},
+               content_type: 'application/json',
+               body: {t: '2014-01-03T00:00:01Z', v: 10}.to_json
+               ).
+          to_return(headers: {content_type: 'application/json; charset=utf-8'},
+                    body: {t: '2014-01-03T00:00:01Z', v: 10}.to_json,
+                    status: 201
+                    )
+      dp = @datastream.datapoints.build(t: '2014-01-03T00:00:01Z', v: 10)
+      expect(dp).to be_kind_of Dotide::Models::Datapoint
+      expect(dp.persist?).to be_false
+      dp.save
+      expect(dp.persist?).to be_true
       assert_requested post_request
     end
 
