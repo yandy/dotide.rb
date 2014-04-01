@@ -1,6 +1,6 @@
-# Dotide
+# Dotide.rb
 
-Ruby lib for Dotide API
+Ruby library for Dotide API
 
 [![Build Status](https://travis-ci.org/dotide/dotide.rb.png?branch=master)](https://travis-ci.org/dotide/dotide.rb)
 
@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+[See Documents for Ruby Lib][doc]
 
 ## Contributing
 
@@ -29,3 +29,5 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+[doc]: http://developer.dotide.com/docs/libraries/ruby.html

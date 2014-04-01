@@ -1,5 +1,7 @@
 module Dotide
   module Models
+
+    # @private
     class Base
       class << self
         def attr_accessor(*attrs)
