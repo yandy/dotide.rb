@@ -12,5 +12,3 @@ matrix:
     - rvm: rbx-19mode
 env:
   - TEST_DOTIDE_CLIENT_ID="81cc731c94b09f711ffc" TEST_DOTIDE_CLIENT_SECRET="1d3016a9b5bcd173020e613dac553be71f1e7ade" TEST_DOTIDE_ACCESS_TOKEN="21e633d4eae63fab9af266e886da2880c5cc6fc723a5e0221459a8a086c9c8a7"
-before_script:
-  - chmod 600 spec/fixtures/.netrc
