@@ -4,13 +4,13 @@ require 'json'
 describe "Manipulate" do
   before(:each) do
     Dotide.reset!
-    @connection = oauth_connection
-    @connection.use test_dotide_database
+    @client = oauth_client
+    @client.use test_dotide_database
   end
 
   describe "datastreams:" do
     before(:each) do
-      @datastreams = @connection.datastreams
+      @datastreams = @client.datastreams
     end
 
     it 'list datastreams using query params', :vcr do
@@ -98,7 +98,7 @@ describe "Manipulate" do
                :body => body.to_json
                ).
           to_return(json_response('datastream.json'))
-      datastreams = @connection.datastreams
+      datastreams = @client.datastreams
       @datastream = datastreams.create(body)
     end
 

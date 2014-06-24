@@ -10,7 +10,7 @@ module Dotide
   # Connection for the Dotide API
   #
   # @see http://developer.dotide.com
-  class Connection
+  class Client
 
     include Dotide::Configurable
     include Dotide::Authentication

@@ -15,12 +15,12 @@ describe Dotide do
     end
   end
 
-  describe ".connection" do
-    it "creates an Dotide::Connection" do
-      expect(Dotide.connection).to be_kind_of Dotide::Connection
+  describe ".client" do
+    it "creates an Dotide::Client" do
+      expect(Dotide.client).to be_kind_of Dotide::Client
     end
-    it "caches the connection when the same options are passed" do
-      expect(Dotide.connection).to eq Dotide.connection
+    it "caches the client when the same options are passed" do
+      expect(Dotide.client).to eq Dotide.client
     end
   end
 

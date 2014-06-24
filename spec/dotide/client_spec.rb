@@ -1,7 +1,7 @@
 require 'helper'
 require 'json'
 
-describe Dotide::Connection do
+describe Dotide::Client do
 
   before do
     Dotide.reset!
@@ -27,9 +27,9 @@ describe Dotide::Connection do
     end
 
     it "inherits the module configuration" do
-      connection = Dotide::Connection.new
+      client = Dotide::Client.new
       Dotide::Configurable.keys.each do |key|
-        expect(connection.instance_variable_get(:"@#{key}")).to eq "Some #{key}"
+        expect(client.instance_variable_get(:"@#{key}")).to eq "Some #{key}"
       end
     end
 
@@ -44,31 +44,31 @@ describe Dotide::Connection do
       end
 
       it "overrides module configuration" do
-        connection = Dotide::Connection.new(@opts)
-        expect(connection.client_id).to eq test_dotide_client_id
-        expect(connection.instance_variable_get(:"@client_secret")).to eq test_dotide_client_secret
+        client = Dotide::Client.new(@opts)
+        expect(client.client_id).to eq test_dotide_client_id
+        expect(client.instance_variable_get(:"@client_secret")).to eq test_dotide_client_secret
       end
 
       it "can set configuration after initialization" do
-        connection = Dotide::Connection.new
-        connection.configure do |config|
+        client = Dotide::Client.new
+        client.configure do |config|
           @opts.each do |key, value|
             config.send("#{key}=", value)
           end
         end
-        expect(connection.client_id).to eq test_dotide_client_id
-        expect(connection.instance_variable_get(:"@client_secret")).to eq test_dotide_client_secret
+        expect(client.client_id).to eq test_dotide_client_id
+        expect(client.instance_variable_get(:"@client_secret")).to eq test_dotide_client_secret
       end
 
       it "masks client_secret on inspect" do
-        connection = Dotide::Connection.new(@opts)
-        inspected = connection.inspect
+        client = Dotide::Client.new(@opts)
+        inspected = client.inspect
         expect(inspected).to_not include test_dotide_client_secret
       end
 
       it "masks tokens on inspect" do
-        connection = Dotide::Connection.new(:access_token => test_dotide_access_token)
-        inspected = connection.inspect
+        client = Dotide::Client.new(:access_token => test_dotide_access_token)
+        inspected = client.inspect
         expect(inspected).to_not match test_dotide_access_token
       end
     end
@@ -77,7 +77,7 @@ describe Dotide::Connection do
   describe "authentication" do
     before do
       Dotide.reset!
-      @connection = Dotide.connection
+      @client = Dotide.client
     end
 
     describe "with module level config" do
@@ -89,51 +89,51 @@ describe Dotide::Connection do
           config.client_id = test_dotide_client_id
           config.client_secret = test_dotide_client_secret
         end
-        expect(Dotide.connection).to be_basic_authenticated
+        expect(Dotide.client).to be_basic_authenticated
       end
       it "sets basic auth creds with module methods" do
         Dotide.client_id = test_dotide_client_id
         Dotide.client_secret = test_dotide_client_secret
-        expect(Dotide.connection).to be_basic_authenticated
+        expect(Dotide.client).to be_basic_authenticated
       end
       it "sets oauth token with .configure" do
         Dotide.configure do |config|
           config.access_token = test_dotide_access_token
         end
-        expect(Dotide.connection).to_not be_basic_authenticated
-        expect(Dotide.connection).to be_token_authenticated
+        expect(Dotide.client).to_not be_basic_authenticated
+        expect(Dotide.client).to be_token_authenticated
       end
       it "sets oauth token with module methods" do
         Dotide.access_token = test_dotide_access_token
-        expect(Dotide.connection).to_not be_basic_authenticated
-        expect(Dotide.connection).to be_token_authenticated
+        expect(Dotide.client).to_not be_basic_authenticated
+        expect(Dotide.client).to be_token_authenticated
       end
     end
 
     describe "with class level config" do
       it "sets basic auth creds with .configure" do
-        @connection.configure do |config|
+        @client.configure do |config|
           config.client_id = test_dotide_client_id
           config.client_secret = test_dotide_client_secret
         end
-        expect(@connection).to be_basic_authenticated
+        expect(@client).to be_basic_authenticated
       end
       it "sets basic auth creds with instance methods" do
-        @connection.client_id = test_dotide_client_id
-        @connection.client_secret = test_dotide_client_secret
-        expect(@connection).to be_basic_authenticated
+        @client.client_id = test_dotide_client_id
+        @client.client_secret = test_dotide_client_secret
+        expect(@client).to be_basic_authenticated
       end
       it "sets oauth token with .configure" do
-        @connection.configure do |config|
+        @client.configure do |config|
           config.access_token = test_dotide_access_token
         end
-        expect(@connection).to_not be_basic_authenticated
-        expect(@connection).to be_token_authenticated
+        expect(@client).to_not be_basic_authenticated
+        expect(@client).to be_token_authenticated
       end
       it "sets oauth token with instance methods" do
-        @connection.access_token = test_dotide_access_token
-        expect(@connection).to_not be_basic_authenticated
-        expect(@connection).to be_token_authenticated
+        @client.access_token = test_dotide_access_token
+        expect(@client).to_not be_basic_authenticated
+        expect(@client).to be_token_authenticated
       end
     end
 
@@ -146,7 +146,7 @@ describe Dotide::Connection do
 
         VCR.turned_off do
           root_request = stub_request(:get, "http://#{test_dotide_client_id}:#{test_dotide_client_secret}@api.dotide.com/v1/")
-          Dotide.connection.get("/")
+          Dotide.client.get("/")
           assert_requested root_request
         end
       end
@@ -154,11 +154,11 @@ describe Dotide::Connection do
 
     describe "when token authenticated", :vcr do
       it "makes authenticated calls" do
-        connection = oauth_connection
+        client = oauth_client
 
         root_request = stub_get("/").
           with(:headers => {:authorization => "Bearer #{test_dotide_access_token}"})
-        connection.get("/")
+        client.get("/")
         assert_requested root_request
       end
     end
@@ -169,11 +169,11 @@ describe Dotide::Connection do
       Dotide.reset!
     end
     it "acts like a Sawyer agent" do
-      expect(Dotide.connection.agent).to respond_to :start
+      expect(Dotide.client.agent).to respond_to :start
     end
     it "caches the agent" do
-      agent = Dotide.connection.agent
-      expect(agent.object_id).to eq Dotide.connection.agent.object_id
+      agent = Dotide.client.agent
+      expect(agent.object_id).to eq Dotide.client.agent.object_id
     end
   end # .agent
 
@@ -181,7 +181,7 @@ describe Dotide::Connection do
     it "fetches the API root" do
       Dotide.reset!
       VCR.use_cassette 'root' do
-        root = Dotide.connection.root
+        root = Dotide.client.root
         expect(root.version).to eq "1"
       end
     end
@@ -190,10 +190,10 @@ describe Dotide::Connection do
   describe ".last_response", :vcr do
     it "caches the last agent response" do
       Dotide.reset!
-      connection = Dotide.connection
-      expect(connection.last_response).to be_nil
-      connection.get "/"
-      expect(connection.last_response.status).to eq 200
+      client = Dotide.client
+      expect(client.last_response).to be_nil
+      client.get "/"
+      expect(client.last_response.status).to eq 200
     end
   end # .last_response
 
@@ -238,29 +238,29 @@ describe Dotide::Connection do
   describe "when making requests" do
     before do
       Dotide.reset!
-      @connection = Dotide.connection
+      @client = Dotide.client
     end
     it "sets a default user agent" do
       root_request = stub_get("/").
         with(:headers => {:user_agent => Dotide::Default.user_agent})
-      @connection.get "/"
+      @client.get "/"
       assert_requested root_request
-      expect(@connection.last_response.status).to eq 200
+      expect(@client.last_response.status).to eq 200
     end
     it "sets a custom user agent" do
       user_agent = "Mozilla/5.0 I am Qin!"
       root_request = stub_get("/").
         with(:headers => {:user_agent => user_agent})
-      @connection.user_agent = user_agent
-      @connection.get "/"
+      @client.user_agent = user_agent
+      @client.get "/"
       assert_requested root_request
-      expect(@connection.last_response.status).to eq 200
+      expect(@client.last_response.status).to eq 200
     end
     it "sets a proxy server" do
-      @connection.configure do |config|
+      @client.configure do |config|
         config.proxy = 'http://proxy.example.com:80'
       end
-      conn = @connection.send(:agent).instance_variable_get(:"@conn")
+      conn = @client.send(:agent).instance_variable_get(:"@conn")
       expect(conn.proxy[:uri].to_s).to eq 'http://proxy.example.com'
     end
     it "passes along request headers for POST" do
@@ -269,9 +269,9 @@ describe Dotide::Connection do
       root_request = stub_post("/").
         with(:headers => headers).
         to_return(:status => 201)
-      @connection.post "/", :headers => headers
+      @client.post "/", :headers => headers
       assert_requested root_request
-      expect(@connection.last_response.status).to eq 201
+      expect(@client.last_response.status).to eq 201
       VCR.turn_on!
     end
   end

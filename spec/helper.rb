@@ -109,14 +109,14 @@ def basic_dotide_url(path, options = {})
   "http://#{client_id}:#{client_secret}@api.dotide.com/v1#{path}"
 end
 
-def basic_auth_connection(client_id = test_dotide_client_id, client_secret = test_dotide_client_secret)
-  connection = Dotide.connection
-  connection.client_id = test_dotide_client_id
-  connection.client_secret = test_dotide_client_secret
+def basic_auth_client(client_id = test_dotide_client_id, client_secret = test_dotide_client_secret)
+  client = Dotide.client
+  client.client_id = test_dotide_client_id
+  client.client_secret = test_dotide_client_secret
 
-  connection
+  client
 end
 
-def oauth_connection
-  Dotide::Connection.new(access_token: test_dotide_access_token)
+def oauth_client
+  Dotide::Client.new(access_token: test_dotide_access_token)
 end
